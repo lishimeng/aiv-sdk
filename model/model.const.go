@@ -1,6 +1,7 @@
-package aiv_sdk
+package model
 
 const (
+	CmdReady              = 0x00 // 这个信号不会发送, 首次接收时判断用
 	CmdReset              = 0x10
 	CmdGetStatus          = 0x11
 	CmdVerify             = 0x12
@@ -129,4 +130,11 @@ const (
 	WorkStateEnroll = 1
 	WorkStateVerify = 2
 	WorkStateIdle   = 0
+)
+
+var (
+	DevStateIdle    = DeviceState{State: 0, Desc: "IDLE"}
+	DevStateBusy    = DeviceState{State: 1, Desc: "BUSY"}
+	DevStateError   = DeviceState{State: 2, Desc: "ERROR"}
+	DevStateInvalid = DeviceState{State: 3, Desc: "INVALID"}
 )

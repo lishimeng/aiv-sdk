@@ -1,4 +1,4 @@
-package aiv_sdk
+package model
 
 // MessageType
 // M->H 上报消息类型
@@ -9,6 +9,11 @@ type MessageStatus byte
 type UnlockStatus int
 
 type FaceState int
+
+type DeviceState struct {
+	State int
+	Desc  string
+}
 
 // BaudRate
 // 波特率index

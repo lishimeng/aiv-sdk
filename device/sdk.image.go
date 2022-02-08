@@ -1,3 +1,3 @@
-package aiv_sdk
+package device
 
 type OnImageData func(data []byte)

@@ -1,10 +1,8 @@
-package aiv_sdk
-
-import "fmt"
+package model
 
 const (
-	PACKET_SYNC_1 PacketSync = 0xEF
-	PACKET_SYNC_2 PacketSync = 0xAA
+	PacketSync1 PacketSync = 0xEF
+	PacketSync2 PacketSync = 0xAA
 )
 
 type PacketSync byte
@@ -44,16 +42,11 @@ func (p *PacketTx) Build() {
 	// 计算chk
 }
 
-func (p PacketTx) CheckSum() bool {
-	return false
-}
-
-func (ps PacketSize) Size() int32 {
-	var low = int32(ps.Low & 0xff)
-	var high = int32(ps.High&0xff) * 256
+func (ps PacketSize) Size() int16 {
+	var low = int16(ps.Low & 0xff)
+	var high = int16(ps.High&0xff) * 256
 	var a = low + high
 
-	fmt.Printf("%d", a)
 	return a
 }
 
@@ -62,9 +55,12 @@ func (p PacketTx) Convert() (c Packet) {
 	return
 }
 
-func (p PacketTx) CalcChk() byte {
-	// TODO
-	return 0x00
+func (p *PacketTx) CalcChk() (chk byte) {
+	// TODO 累加计算？
+	for _, b := range p.PacketData {
+		chk = chk + b
+	}
+	return
 }
 
 func (p PacketTx) Marshall() (bs []byte) {

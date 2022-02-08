@@ -1,4 +1,6 @@
-package aiv_sdk
+package device
+
+import "github.com/lishimeng/aiv-sdk/model"
 
 // OnReady
 // 模块已准备好
@@ -18,4 +20,4 @@ type OnEyeStateCallback func()
 
 // OnFaceStateCallback
 // 算法执行成功，并且返回人脸信息
-type OnFaceStateCallback func(state FaceStateWrapper)
+type OnFaceStateCallback func(state model.FaceStateWrapper)
