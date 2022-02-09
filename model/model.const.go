@@ -48,26 +48,49 @@ const (
 )
 
 const (
-	MR_SUCCESS               = 0  // success
-	MR_REJECTED              = 1  // module rejected this command
-	MR_ABORTED               = 2  // algo aborted
-	MR_FAILED4_CAMERA        = 4  // camera open failed
-	MR_FAILED4_UNKNOWNREASON = 5  // UNKNOWN_ERROR
-	MR_FAILED4_INVALIDPARAM  = 6  // invalid param
-	MR_FAILED4_NOMEMORY      = 7  // no enough memory
-	MR_FAILED4_UNKNOWNUSER   = 8  // Unknown user
-	MR_FAILED4_MAXUSER       = 9  // exceed maximum user number
-	MR_FAILED4_FACEENROLLED  = 10 // this face has been enrolled
-	MR_FAILED4_LIVENESSCHECK = 12 // liveness check failed
-	MR_FAILED4_TIMEOUT       = 13 // exceed the time limit
-	MR_FAILED4_AUTHORIZATION = 14 // authorization failed
-	MR_FAILED4_CAMERAFOV     = 15 // camera fov test failed
-	MR_FAILED4_CAMERAQUA     = 16 // camera quality test failed
-	MR_FAILED4_CAMERASTRU    = 17 // camera structure test failed
-	MR_FAILED4_BOOT_TIMEOUT  = 18 // boot up timeout
-	MR_FAILED4_READ_FILE     = 19 // read file failed
-	MR_FAILED4_WRITE_FILE    = 20 // write file failed
-	MR_FAILED4_NO_ENCRYPT    = 21 // encrypt must be set
+	MrcSuccess              ResultCode = 0  // success
+	MrcRejected             ResultCode = 1  // module rejected this command
+	MrcAborted              ResultCode = 2  // algo aborted
+	MrcFailed4Camera        ResultCode = 4  // camera open failed
+	MrcFailed4UnknownReason ResultCode = 5  // UNKNOWN_ERROR
+	MrcFailed4InvalidParam  ResultCode = 6  // invalid param
+	MrcFailed4NoMemory      ResultCode = 7  // no enough memory
+	MrcFailed4UnknownUser   ResultCode = 8  // Unknown user
+	MrcFailed4MaxUser       ResultCode = 9  // exceed maximum user number
+	MrcFailed4FaceEnrolled  ResultCode = 10 // this face has been enrolled
+	MrcFailed4LiveNessCheck ResultCode = 12 // liveness check failed
+	MrcFailed4Timeout       ResultCode = 13 // exceed the time limit
+	MrcFailed4Authorization ResultCode = 14 // authorization failed
+	MrcFailed4CameraFov     ResultCode = 15 // camera fov test failed
+	MrcFailed4CameraQua     ResultCode = 16 // camera quality test failed
+	MrcFailed4CameraStru    ResultCode = 17 // camera structure test failed
+	MrcFailed4BootTimeout   ResultCode = 18 // boot up timeout
+	MrcFailed4ReadFile      ResultCode = 19 // read file failed
+	MrcFailed4WriteFile     ResultCode = 20 // write file failed
+	MrcFailed4NoEncrypt     ResultCode = 21 // encrypt must be set
+)
+
+var (
+	MrSuccess              = ReplyResult{ResultCode: MrcSuccess, Message: "成功"}                  // success
+	MrRejected             = ReplyResult{ResultCode: MrcRejected, Message: "模块拒绝该命令"}            // module rejected this command
+	MrAborted              = ReplyResult{ResultCode: MrcAborted, Message: "任务已终止"}               // algo aborted
+	MrFailed4Camera        = ReplyResult{ResultCode: MrcFailed4Camera, Message: "相机打开失败"}        // camera open failed
+	MrFailed4UnknownReason = ReplyResult{ResultCode: MrcFailed4UnknownReason, Message: "未知错误"}   // UNKNOWN_ERROR
+	MrFailed4InvalidParam  = ReplyResult{ResultCode: MrcFailed4InvalidParam, Message: "无效的参数"}   // invalid param
+	MrFailed4NoMemory      = ReplyResult{ResultCode: MrcFailed4NoMemory, Message: "内存不足"}        // no enough memory
+	MrFailed4UnknownUser   = ReplyResult{ResultCode: MrcFailed4UnknownUser, Message: "没有已录入的用户"} // Unknown user
+	MrFailed4MaxUser       = ReplyResult{ResultCode: MrcFailed4MaxUser, Message: "v"}            // exceed maximum user number
+	MrFailed4FaceEnrolled  = ReplyResult{ResultCode: MrcFailed4FaceEnrolled, Message: "人脸已录入"}   // this face has been enrolled
+	MrFailed4LiveNessCheck = ReplyResult{ResultCode: MrcFailed4LiveNessCheck, Message: "活体检测失败"} // liveness check failed
+	MrFailed4Timeout       = ReplyResult{ResultCode: MrcFailed4Timeout, Message: "超时"}           // exceed the time limit
+	MrFailed4Authorization = ReplyResult{ResultCode: MrcFailed4Authorization, Message: "授权失败"}   // authorization failed
+	MrFailed4CameraFov     = ReplyResult{ResultCode: MrcFailed4CameraFov, Message: "相机视野测试失败"}   // camera fov test failed
+	MrFailed4CameraQua     = ReplyResult{ResultCode: MrcFailed4CameraQua, Message: "相机质量测试失败"}   // camera quality test failed
+	MrFailed4CameraStru    = ReplyResult{ResultCode: MrcFailed4CameraStru, Message: "相机结构测试失败"}  // camera structure test failed
+	MrFailed4BootTimeout   = ReplyResult{ResultCode: MrcFailed4BootTimeout, Message: "设备启动超时"}   // boot up timeout
+	MrFailed4ReadFile      = ReplyResult{ResultCode: MrcFailed4ReadFile, Message: "读文件失败"}       // read file failed
+	MrFailed4WriteFile     = ReplyResult{ResultCode: MrcFailed4WriteFile, Message: "写文件失败"}      // write file failed
+	MrFailed4NoEncrypt     = ReplyResult{ResultCode: MrcFailed4NoEncrypt, Message: "通信协议未加密"}    // encrypt must be set
 )
 
 const (

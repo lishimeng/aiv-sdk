@@ -2,23 +2,6 @@ package device
 
 import "github.com/lishimeng/aiv-sdk/model"
 
-func (ps *PacketSdk) GetFeatureInfo(param model.UserId) (err error) {
-	var payload []byte
-	payload = append(payload, param.UserIdHeb, param.UserIdLeb)
-	packet := ps.Builder().Cmd(model.CmdGetFeatureInfo).Body(payload).Build()
-	err = ps.send(packet)
-	return
-}
-
-func (ps *PacketSdk) UploadFeature(param model.MessageUploadFaceFeature) (err error) {
-	var payload []byte
-	payload = append(payload, param.Offset...)
-	payload = append(payload, param.Size...)
-	packet := ps.Builder().Cmd(model.CmdUploadFeature).Body(payload).Build()
-	err = ps.send(packet)
-	return
-}
-
 func (ps *PacketSdk) GetLogFile() (err error) {
 	packet := ps.Builder().Cmd(model.CmdGetLogFile).Build()
 	err = ps.send(packet)
@@ -47,7 +30,16 @@ func (ps *PacketSdk) DemoMode(enable model.DemoMode) (err error) {
 	return
 }
 
+// TransFilePacket
+// 参数： 中对应的总文件大小，
+//       本包相对于起始文件的偏移量
+//       本包的大小（所有包大小相加应等于文件大小），
+//       数据
+// *所有文件数据发送完成后，需特别再发一次偏移量和包大小都为0的数据的数据，作为此作为此文件发送结束文件发送结束的标志的标志
 func (ps *PacketSdk) TransFilePacket(param model.MessageTransFileData) (err error) {
+	// 下发图片到模块(不用)
+	// 用图片注册的第一步需要先下发人脸图片文件
+	// 特征文件传输完成后,使用 ID_ENROLL_FROM_IMAGE命令进行注册
 	var payload []byte
 	payload = append(payload, param.StoreType)
 	payload = append(payload, param.FileSize...)

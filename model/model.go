@@ -42,9 +42,16 @@ type FaceStateWrapper struct {
 	Roll   uint16
 }
 
+type ResultCode byte
+
+type ReplyResult struct {
+	ResultCode
+	Message string
+}
+
 type ReplyBody struct {
 	Mid    byte
-	Result byte
+	Result ReplyResult
 	Data   []byte
 }
 

@@ -19,4 +19,5 @@ func (s *SerialSdk) StopEnroll() {
 // ResetEnroll 放弃人脸采集
 func (s *SerialSdk) ResetEnroll() {
 
+	_ = s.dev.FaceReset()
 }

@@ -25,7 +25,12 @@ type PacketSdk struct {
 
 	enrollQueue bytes.Buffer
 
-	cmd model.Command
+	cmdCheck bool
+	cmd      model.Command
+}
+
+func (ps *PacketSdk) CheckReplyCommand(enable bool) {
+	ps.cmdCheck = enable
 }
 
 func (ps *PacketSdk) setCommand(cmd model.Command) {
@@ -75,6 +80,7 @@ func (ps *PacketSdk) onRx(buffer bytes.Buffer) {
 	var err error
 	var bufferSize int
 	var packetSize int16
+	var packetBodySize int16
 	var dataSize int16
 	for {
 		bufferSize = buffer.Len()
@@ -99,6 +105,7 @@ func (ps *PacketSdk) onRx(buffer bytes.Buffer) {
 
 		if bufferSize >= 5 { // 已经取到size字段
 			dataSize = util.Bytes2Int16(bs[3:])
+			packetBodySize = dataSize + 1 + 2     // msgId(1byte)+size(2byte)
 			packetSize = dataSize + 2 + 1 + 2 + 1 //sync(2byte)+msgId(1byte)+size(2byte)+chk(1byte)
 		}
 
@@ -106,7 +113,7 @@ func (ps *PacketSdk) onRx(buffer bytes.Buffer) {
 			return
 		}
 
-		var chk = util.CalcChk(bs, packetSize)
+		var chk = util.PacketChk(bs, packetBodySize, bs[packetSize])
 		// calc chk
 
 		if chk {
@@ -144,11 +151,16 @@ func (ps *PacketSdk) onReply(rx model.PacketRx) {
 
 	var replyBody model.ReplyBody
 
+	var resultCode = model.ResultCode(rx.PacketData[1])
 	replyBody.Mid = rx.PacketData[0]
-	replyBody.Result = rx.PacketData[1]
+	replyBody.Result = resultCode.Convert()
 	replyBody.Data = append(replyBody.Data, rx.PacketData[2:rx.PacketSize+2]...)
-	var midMatch = ps.checkCmd(model.Command(replyBody.Mid))
-	var success = replyBody.Result == 0x01
+	var midMatch = true
+	if ps.cmdCheck {
+		midMatch = ps.checkCmd(model.Command(replyBody.Mid))
+	}
+	var success = replyBody.Result.ResultCode == model.MrSuccess.ResultCode
+
 	if ps.handleReply != nil {
 		go ps.handleReply(midMatch, success, replyBody)
 	}
