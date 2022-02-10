@@ -25,12 +25,19 @@ type PacketSdk struct {
 
 	enrollQueue bytes.Buffer
 
-	cmdCheck bool
-	cmd      model.Command
+	cmdCheck    bool
+	parityCheck bool
+	cmd         model.Command
 }
 
+// CheckReplyCommand reply message id检查
 func (ps *PacketSdk) CheckReplyCommand(enable bool) {
 	ps.cmdCheck = enable
+}
+
+// CheckPacket 帧校验码检查
+func (ps *PacketSdk) CheckPacket(enable bool) {
+	ps.parityCheck = enable
 }
 
 func (ps *PacketSdk) setCommand(cmd model.Command) {
@@ -41,7 +48,12 @@ func (ps *PacketSdk) SetReplyHandler(handler func(midMatch bool, success bool, b
 	ps.handleReply = handler
 }
 
+func (ps *PacketSdk) SetNoteHandler(handler func(model.MessageNote)) {
+	ps.handleNote = handler
+}
+
 func (ps *PacketSdk) init() {
+	ps.cmdCheck = true      // 默认检查
 	ps.cmd = model.CmdReady // 应收到ready信号
 	ps.enrollQueue = bytes.Buffer{}
 }
@@ -113,8 +125,10 @@ func (ps *PacketSdk) onRx(buffer bytes.Buffer) {
 			return
 		}
 
-		var chk = util.PacketChk(bs, packetBodySize, bs[packetSize])
-		// calc chk
+		var chk = true
+		if ps.parityCheck {
+			chk = util.PacketChk(bs, packetBodySize, bs[packetSize])
+		}
 
 		if chk {
 			var messageType = model.MessageType(bs[2])
